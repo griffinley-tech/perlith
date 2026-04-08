@@ -1,0 +1,41 @@
+{
+  "name": "perlith",
+  "version": "0.1.0",
+  "description": "Persistent memory for AI agents. File-based, Git-native, zero database.",
+  "main": "src/index.js",
+  "bin": {
+    "perlith-mcp": "bin/perlith-mcp.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "test": "node --test src/__tests__/*.js"
+  },
+  "keywords": [
+    "ai",
+    "agents",
+    "memory",
+    "mcp",
+    "claude",
+    "cursor",
+    "persistence",
+    "context-management"
+  ],
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "js-yaml": "^4.1.0",
+    "simple-git": "^3.27.0",
+    "zod": "^4.3.0"
+  },
+  "devDependencies": {},
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/griffinley-tech/perlith.git"
+  },
+  "homepage": "https://github.com/griffinley-tech/perlith",
+  "bugs": {
+    "url": "https://github.com/griffinley-tech/perlith/issues"
+  }
+}
