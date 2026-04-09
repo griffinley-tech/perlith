@@ -12,6 +12,10 @@ What problem does this feature solve?
 
 How should it work?
 
+## Use Case
+
+How are you using Perlith today? (e.g., which MCP client, how many agents, what kind of data)
+
 ## Alternatives Considered
 
 Other approaches you've thought about.

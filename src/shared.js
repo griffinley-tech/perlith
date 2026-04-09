@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: Apache-2.0
 'use strict'
 // SPDX-License-Identifier: Apache-2.0
 // shared.js — Shared namespace write ops (shared-namespace). MEM-032/MEM-033 enforcement.

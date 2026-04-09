@@ -20,10 +20,11 @@ What you expected to happen.
 
 ## Actual Behavior
 
-What actually happened.
+What actually happened. Include error messages or logs if available.
 
 ## Environment
 
 - Node.js version:
 - OS:
 - Perlith version:
+- Usage context: [ ] Library (require/import) [ ] MCP server (stdio) [ ] MCP server (hosted)

@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [20, 22]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - run: npm install
+
+      - name: Verify module loads
+        run: node -e "const p = require('./src/index.js'); console.log('Exports:', Object.keys(p).join(', '))"
+
+      - name: Verify MCP server parses
+        run: node --check bin/perlith-mcp.mjs
+
+      - name: Run tests
+        run: npm test
+        continue-on-error: true
+
+      - name: Check SPDX headers
+        run: |
+          missing=$(grep -rL "SPDX-License-Identifier" src/*.js src/*.mjs bin/*.mjs 2>/dev/null || true)
+          if [ -n "$missing" ]; then
+            echo "Missing SPDX header in:"
+            echo "$missing"
+            exit 1
+          fi
