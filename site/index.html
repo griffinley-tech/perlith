@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Perlith — Persistent Memory for AI Agents</title>
+  <meta name="description" content="File-based agent memory. Git-native. Zero database. Give your AI agents memory that survives between sessions.">
+  <meta property="og:title" content="Perlith — Persistent Memory for AI Agents">
+  <meta property="og:description" content="File-based agent memory. Git-native. Zero database.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://perlith.dev">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@GriffinleyTech">
+  <meta name="twitter:title" content="Perlith — Persistent Memory for AI Agents">
+  <meta name="twitter:description" content="File-based agent memory. Git-native. Zero database.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#x1f9e0;</text></svg>">
+  <style>
+    :root {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --border: #30363d;
+      --text: #c9d1d9;
+      --text-muted: #8b949e;
+      --accent: #58a6ff;
+      --accent-dim: #1f6feb;
+      --green: #3fb950;
+      --code-bg: #0d1117;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* Header */
+    header {
+      padding: 48px 0 0;
+    }
+
+    .logo {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-muted);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      font-size: 40px;
+      font-weight: 700;
+      line-height: 1.2;
+      margin: 16px 0 12px;
+      color: #f0f6fc;
+    }
+
+    .tagline {
+      font-size: 20px;
+      color: var(--text-muted);
+      margin-bottom: 32px;
+    }
+
+    /* Install block */
+    .install {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px 24px;
+      margin-bottom: 48px;
+    }
+
+    .install-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 12px;
+    }
+
+    .install code {
+      display: block;
+      font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+      font-size: 15px;
+      color: var(--green);
+    }
+
+    .install code + code {
+      margin-top: 4px;
+    }
+
+    .prompt {
+      color: var(--text-muted);
+      user-select: none;
+    }
+
+    /* Links row */
+    .links {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 48px;
+    }
+
+    .links a {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--accent);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      text-decoration: none;
+      transition: border-color 0.15s;
+    }
+
+    .links a:hover {
+      border-color: var(--accent-dim);
+    }
+
+    /* Sections */
+    section {
+      margin-bottom: 48px;
+    }
+
+    h2 {
+      font-size: 22px;
+      font-weight: 600;
+      color: #f0f6fc;
+      margin-bottom: 16px;
+    }
+
+    p {
+      margin-bottom: 16px;
+      color: var(--text);
+    }
+
+    p.muted {
+      color: var(--text-muted);
+      font-size: 15px;
+    }
+
+    /* Code blocks */
+    pre {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px 24px;
+      overflow-x: auto;
+      margin-bottom: 16px;
+      font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+      font-size: 14px;
+      line-height: 1.5;
+      color: var(--text);
+    }
+
+    pre .comment { color: var(--text-muted); }
+    pre .keyword { color: #ff7b72; }
+    pre .string { color: #a5d6ff; }
+    pre .fn { color: #d2a8ff; }
+    pre .const { color: #79c0ff; }
+
+    /* Feature grid */
+    .features {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .feature {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px;
+    }
+
+    .feature h3 {
+      font-size: 15px;
+      font-weight: 600;
+      color: #f0f6fc;
+      margin-bottom: 8px;
+    }
+
+    .feature p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 0;
+    }
+
+    /* MCP section */
+    .mcp-badge {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--green);
+      background: rgba(63, 185, 80, 0.1);
+      border: 1px solid rgba(63, 185, 80, 0.3);
+      border-radius: 12px;
+      padding: 2px 10px;
+      margin-bottom: 12px;
+    }
+
+    /* Audit section */
+    .audit-cmd {
+      font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+      font-size: 14px;
+      color: var(--green);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 8px 14px;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .audit-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 32px 0;
+      margin-top: 24px;
+    }
+
+    footer p {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    footer a {
+      color: var(--text-muted);
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      color: var(--accent);
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      h1 { font-size: 28px; }
+      .tagline { font-size: 17px; }
+      .features { grid-template-columns: 1fr; }
+      header { padding: 32px 0 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="logo">Perlith</div>
+      <h1>Memory that survives the session.</h1>
+      <p class="tagline">Persistent memory for AI agents. File-based. Git-native. Zero database.</p>
+
+      <div class="install">
+        <div class="install-label">Get started</div>
+        <code><span class="prompt">$ </span>npm install perlith</code>
+      </div>
+
+      <div class="links">
+        <a href="https://github.com/griffinley-tech/perlith">GitHub</a>
+        <a href="https://github.com/griffinley-tech/perlith#quick-start">Docs</a>
+        <a href="https://github.com/griffinley-tech/perlith#mcp-server">MCP Server</a>
+      </div>
+    </header>
+
+    <section>
+      <h2>The problem</h2>
+      <p>AI agents forget everything between sessions. Every conversation starts from scratch. Developers compensate with massive configuration files, copy-pasted context, and fragile prompt engineering. The longer the session, the worse the output gets.</p>
+      <p>Perlith gives agents a structured memory that lives outside the context window. Facts are stored as plain files. Changes are git commits. Retrieval is fast and precise. Nothing is lost when a session ends.</p>
+    </section>
+
+    <section>
+      <div class="features">
+        <div class="feature">
+          <h3>Plain files</h3>
+          <p>Every memory is a markdown file on disk. Read them with cat, search with grep, version with git. No proprietary format.</p>
+        </div>
+        <div class="feature">
+          <h3>Git-native</h3>
+          <p>Every write is a commit. Full provenance via git log. Diff any two points in time. Blame any fact to its source.</p>
+        </div>
+        <div class="feature">
+          <h3>Tiered memory</h3>
+          <p>L1 episodic (raw), L2 semantic (consolidated facts), L3 procedural (learned behaviors). Nightly dream cycle promotes and prunes.</p>
+        </div>
+        <div class="feature">
+          <h3>Multi-agent</h3>
+          <p>Namespace isolation by default. Shared memory with access control. Each agent has its own memory, governed by the same system.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Quick start</h2>
+      <pre><span class="keyword">const</span> <span class="const">perlith</span> = <span class="fn">require</span>(<span class="string">'perlith'</span>)
+
+<span class="comment">// Initialize an agent</span>
+<span class="keyword">await</span> perlith.<span class="fn">initAgent</span>(<span class="string">'./memory'</span>, <span class="string">'my-agent'</span>)
+
+<span class="comment">// Store a memory</span>
+<span class="keyword">await</span> perlith.<span class="fn">addMemory</span>(<span class="string">'./memory'</span>, <span class="string">'my-agent'</span>, {
+  layer: <span class="string">'L1'</span>,
+  body: <span class="string">'User prefers dark mode and uses VS Code.'</span>,
+  tags: [<span class="string">'preferences'</span>, <span class="string">'editor'</span>],
+})
+
+<span class="comment">// Retrieve relevant memories</span>
+<span class="keyword">const</span> <span class="const">results</span> = <span class="keyword">await</span> perlith.<span class="fn">retrieve</span>(
+  <span class="string">'./memory'</span>, <span class="string">'my-agent'</span>, <span class="string">'editor preferences'</span>
+)</pre>
+    </section>
+
+    <section>
+      <span class="mcp-badge">MCP Ready</span>
+      <h2>Works with Claude Code, Cursor, and any MCP client</h2>
+      <p>Perlith ships an MCP server. One line in your config, five tools available to your agent: init, store, retrieve, search, and list.</p>
+      <pre><span class="comment">// claude_desktop_config.json or .claude.json</span>
+{
+  <span class="string">"mcpServers"</span>: {
+    <span class="string">"perlith"</span>: {
+      <span class="string">"command"</span>: <span class="string">"npx"</span>,
+      <span class="string">"args"</span>: [<span class="string">"perlith-mcp"</span>],
+      <span class="string">"env"</span>: { <span class="string">"PERLITH_BASE_DIR"</span>: <span class="string">"./memory"</span> }
+    }
+  }
+}</pre>
+      <p class="muted">Or connect to the hosted endpoint at <code>perlith.dev/mcp</code> for quick experimentation.</p>
+    </section>
+
+    <section>
+      <h2>Full audit trail</h2>
+      <p>Every decision your agent makes is traceable. No opaque vector stores, no hidden state.</p>
+      <code class="audit-cmd">git log --follow agent/L2_semantic/topics/preference-001.md</code>
+      <p class="audit-desc">When was this fact learned? How has it changed?</p>
+      <code class="audit-cmd">git diff HEAD~1</code>
+      <p class="audit-desc">What changed in the last memory consolidation?</p>
+      <code class="audit-cmd">git blame agent/L2_semantic/topics/preference-001.md</code>
+      <p class="audit-desc">Which agent authored each line of this memory?</p>
+    </section>
+
+    <section>
+      <h2>Architecture</h2>
+      <p>Perlith is modeled on human memory consolidation. Raw experiences (L1) are clustered overnight into durable facts (L2). Repeated patterns are elevated to procedures (L3). A decay function ensures retrieval quality stays high by letting stale memories fade.</p>
+      <p>There is no vector database. There is no infrastructure to manage. It runs wherever Node runs, stores data wherever files live, and versions history wherever git works.</p>
+    </section>
+
+    <footer>
+      <p>Apache-2.0 &middot; <a href="https://github.com/griffinley-tech/perlith">Source</a> &middot; <a href="https://github.com/griffinley-tech/perlith/blob/main/SECURITY.md">Security</a> &middot; <a href="https://github.com/griffinley-tech/perlith/blob/main/CONTRIBUTING.md">Contributing</a></p>
+      <p>Built by <a href="https://griffinley.com">Griffinley LLC</a> &middot; <a href="https://x.com/GriffinleyTech">@GriffinleyTech</a></p>
+    </footer>
+  </div>
+</body>
+</html>
